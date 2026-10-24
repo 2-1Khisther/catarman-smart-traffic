@@ -1,0 +1,28 @@
+# Squad B vision config. Values here, not in code.
+
+model:
+  weights: yolov8n.pt        # swap for the fine-tuned model after Phase 2
+  imgsz: 640                 # keep 640: 1:64 motorcycles are only ~3 cm
+  conf: 0.35
+
+# PCU weights. Brief fixes only car = 1.0 and tricycle = 0.5 ("1 car ≈ 2 tricycles").
+# Motorcycle value is a placeholder: needs adviser sign-off and a cited source.
+pcu:
+  car: 1.0
+  tricycle: 0.5
+  motorcycle: 0.25           # TODO: confirm with adviser
+
+# Opposite approaches share a phase (Squad A diorama: N = S, E = W)
+phases:
+  NS: [N, S]
+  EW: [E, W]
+
+mqtt:
+  heartbeat_hz: 2
+  density_hz: 1
+
+health:
+  occluded_brightness_max: 25      # mean grey level below this = lens covered
+  degraded_blur_min: 60            # Laplacian variance below this = blurry / wet lens
+  degraded_conf_min: 0.30          # mean detection confidence below this
+  recover_seconds: 5               # good frames needed before reporting OK again

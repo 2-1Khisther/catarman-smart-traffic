@@ -1,0 +1,14 @@
+.env
+__pycache__/
+*.pyc
+.venv/
+venv/
+.idea/
+*.pt
+*_openvino_model/
+*.onnx
+runs/
+edge_vision/buffer/*.db
+edge_vision/crops/
+datasets/
+node_modules/

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "catarman/int01/vision/violation",
+  "description": "Published by Squad B, QoS 1, once per tracked vehicle crossing the stop line while its phase is red. No PII, no OCR (RA 10173).",
+  "type": "object",
+  "required": ["event_id", "ts", "approach", "cls", "centroid", "bbox", "crop_file"],
+  "additionalProperties": false,
+  "properties": {
+    "event_id": {"type": "string", "minLength": 8},
+    "ts": {"type": "string", "format": "date-time"},
+    "approach": {"enum": ["N", "E", "S", "W"]},
+    "cls": {"enum": ["tricycle", "motorcycle", "car"]},
+    "centroid": {"type": "array", "items": {"type": "integer", "minimum": 0}, "minItems": 2, "maxItems": 2},
+    "bbox": {"type": "array", "items": {"type": "integer", "minimum": 0}, "minItems": 4, "maxItems": 4},
+    "crop_file": {"type": "string"}
+  }
+}

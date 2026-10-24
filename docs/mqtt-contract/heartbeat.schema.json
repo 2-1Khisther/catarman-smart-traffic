@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "catarman/int01/vision/heartbeat",
+  "description": "Published by Squad B at 2 Hz, QoS 0. Squad A treats 3 missing heartbeats as camera lost (Level 2).",
+  "type": "object",
+  "required": ["ts", "seq", "fps", "conf_avg", "status"],
+  "additionalProperties": false,
+  "properties": {
+    "ts": {"type": "string", "format": "date-time"},
+    "seq": {"type": "integer", "minimum": 0},
+    "fps": {"type": "number", "minimum": 0},
+    "conf_avg": {"type": "number", "minimum": 0, "maximum": 1},
+    "status": {"enum": ["OK", "DEGRADED", "OCCLUDED"]}
+  }
+}

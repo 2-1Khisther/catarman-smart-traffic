@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "catarman/int01/vision/density",
+  "description": "Published by Squad B at 1 Hz, QoS 0. Squad A uses phases.NS / phases.EW PCU for green-phase allocation.",
+  "type": "object",
+  "required": ["ts", "seq", "approaches", "phases"],
+  "additionalProperties": false,
+  "$defs": {
+    "approach": {
+      "type": "object",
+      "required": ["counts", "pcu"],
+      "additionalProperties": false,
+      "properties": {
+        "counts": {
+          "type": "object",
+          "required": ["tricycle", "motorcycle", "car"],
+          "additionalProperties": false,
+          "properties": {
+            "tricycle": {"type": "integer", "minimum": 0},
+            "motorcycle": {"type": "integer", "minimum": 0},
+            "car": {"type": "integer", "minimum": 0}
+          }
+        },
+        "pcu": {"type": "number", "minimum": 0}
+      }
+    }
+  },
+  "properties": {
+    "ts": {"type": "string", "format": "date-time"},
+    "seq": {"type": "integer", "minimum": 0},
+    "approaches": {
+      "type": "object",
+      "required": ["N", "E", "S", "W"],
+      "additionalProperties": false,
+      "properties": {
+        "N": {"$ref": "#/$defs/approach"},
+        "E": {"$ref": "#/$defs/approach"},
+        "S": {"$ref": "#/$defs/approach"},
+        "W": {"$ref": "#/$defs/approach"}
+      }
+    },
+    "phases": {
+      "type": "object",
+      "required": ["NS", "EW"],
+      "additionalProperties": false,
+      "properties": {
+        "NS": {"type": "number", "minimum": 0},
+        "EW": {"type": "number", "minimum": 0}
+      }
+    }
+  }
+}
