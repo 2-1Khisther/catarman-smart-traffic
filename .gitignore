@@ -12,3 +12,4 @@ edge_vision/buffer/*.db
 edge_vision/crops/
 datasets/
 node_modules/
+edge_vision/rois_preview.jpg

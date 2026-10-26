@@ -2,8 +2,23 @@
 
 model:
   weights: yolov8n.pt        # swap for the fine-tuned model after Phase 2
-  imgsz: 640                 # keep 640: 1:64 motorcycles are only ~3 cm
+  imgsz: 416                 # Phase 0: 17.9 FPS at 416 on the i5-8250U (640 = 10.2 FPS)
   conf: 0.35
+  tracker: bytetrack.yaml
+
+camera:
+  width: 1280
+  height: 720
+
+# Model class name -> our class. Stock COCO weights have no tricycle class;
+# the fine-tuned model (Phase 2) will output "tricycle" directly.
+classes:
+  car: car
+  truck: car
+  bus: car
+  motorcycle: motorcycle
+  bicycle: motorcycle
+  tricycle: tricycle
 
 # PCU weights. Brief fixes only car = 1.0 and tricycle = 0.5 ("1 car ≈ 2 tricycles").
 # Motorcycle value is a placeholder: needs adviser sign-off and a cited source.
@@ -17,12 +32,23 @@ phases:
   NS: [N, S]
   EW: [E, W]
 
+rois:
+  file: rois.json            # made by tools/roi_tool.py
+  crop_margin: 0.08          # extra border around the marked roads, as a fraction of frame width
+
 mqtt:
   heartbeat_hz: 2
   density_hz: 1
+  controller_stale_s: 5      # ignore controller/state older than this
 
 health:
-  occluded_brightness_max: 25      # mean grey level below this = lens covered
+  occluded_brightness_max: 25      # mean grey level below this = lens covered / dark
+  occluded_blur_max: 15            # Laplacian variance below this = card on lens (flat image)
   degraded_blur_min: 60            # Laplacian variance below this = blurry / wet lens
   degraded_conf_min: 0.30          # mean detection confidence below this
   recover_seconds: 5               # good frames needed before reporting OK again
+
+violations:
+  crop_max_px: 96            # crops are shrunk to this size...
+  crop_blur: 9               # ...and blurred, so body numbers are unreadable (RA 10173)
+  track_forget_s: 5          # forget a track id after this long unseen

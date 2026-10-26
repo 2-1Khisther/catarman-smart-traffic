@@ -29,6 +29,26 @@ Monorepo for the 4th-year IT midterm project. Squad B (Edge Vision & AI) starter
    ```
 5. Write your numbers in `docs/test-reports/phase0-baseline.md`.
 
+## Running the real vision node
+
+1. Point the phone at the intersection, then mark the roads (redo whenever the camera moves):
+   ```
+   python tools/roi_tool.py
+   ```
+   SPACE freezes the picture. For each road N, E, S, W: click the corners of the waiting lane,
+   press ENTER, then click the two ends of its stop line. Saves `rois.json`.
+2. Start the node (Mosquitto running):
+   ```
+   python vision_node.py
+   ```
+   Window shows boxes, track IDs, counts per road (T/M/C), FPS, camera status and MQTT state.
+   Press q to stop. Use `--source clip.mp4` for a recorded clip, `--no-window` for headless.
+3. Test: cover the lens with your hand -> status OCCLUDED at once, back to OK 5 s after you uncover it.
+
+Violations are only judged when Squad A's `controller/state` is received (and never during
+flood L4, faults or amber). Crops in `crops/` are 96 px and blurred (RA 10173).
+Everything published is also logged to `buffer/vision_log.db` (offline-first).
+
 ## MQTT contract
 
 See `docs/mqtt-contract/`. Every message Squad B publishes must pass these schemas.
